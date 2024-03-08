@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Socat
         run: |
-          C:\tools\Cygwin\bin\bash.exe -lc "git clone https://github.com/craSH/socat.git && cd socat && ./configure && make"
+          C:\tools\Cygwin\bin\bash.exe -lc "git clone https://github.com/theshdowaura/socat.git && cd socat && ./configure && make"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
