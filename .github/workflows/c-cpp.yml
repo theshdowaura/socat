@@ -1,0 +1,34 @@
+name: Build Socat
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+
+      - name: Install MSYS2
+        uses: actions/setup-msys2@v1
+
+      - name: Update MSYS2
+        run: pacman -Syu --noconfirm
+
+      - name: Install build dependencies
+        run: pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-make
+
+      - name: Build Socat
+        run: |
+          git clone https://github.com/theshdowaura/socat.git
+          cd socat
+          ./configure
+          make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: socat
+          path: socat/socat.exe
