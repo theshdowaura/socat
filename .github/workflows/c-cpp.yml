@@ -1,34 +1,33 @@
-name: Build Socat
+name: Build socat
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v2
+    - name: Set up Cygwin
+      uses: actions/checkout@v2
 
-      - name: Install Chocolatey
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    - name: Install Cygwin
+      run: |
+        choco install cygwin -y
+        refreshenv
 
-      - name: Install Cygwin
-        run: |
-          choco install cygwin -y
+    - name: Build socat
+      run: |
+        # 进入 Cygwin 环境
+        cygwin/bin/bash -l -c "cd /path/to/socat && ./configure && make"
 
-      - name: Convert line endings
-        run: |
-          dos2unix socat/configure
-
-      - name: Build Socat
-        run: |
-          C:\tools\Cygwin\bin\bash.exe -lc "git clone https://github.com/theshdowaura/socat.git && cd socat && ./configure && make"
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: socat
-          path: socat/socat.exe
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: socat
+        path: /path/to/socat/bin/socat
