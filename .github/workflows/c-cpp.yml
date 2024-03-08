@@ -19,6 +19,10 @@ jobs:
         run: |
           choco install cygwin -y
 
+      - name: Convert line endings
+        run: |
+          dos2unix socat/configure
+
       - name: Build Socat
         run: |
           C:\tools\Cygwin\bin\bash.exe -lc "git clone https://github.com/theshdowaura/socat.git && cd socat && ./configure && make"
