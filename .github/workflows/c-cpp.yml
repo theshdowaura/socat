@@ -11,17 +11,17 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v2
 
+      - name: Install Chocolatey
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
       - name: Install Cygwin
         run: |
           choco install cygwin -y
-          refreshenv
 
       - name: Build Socat
         run: |
-          git clone https://github.com/theshdowaura/socat.git
-          cd socat
-          ./configure
-          make
+          C:\tools\Cygwin\bin\bash.exe -lc "git clone https://github.com/craSH/socat.git && cd socat && ./configure && make"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
