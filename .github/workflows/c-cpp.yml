@@ -21,13 +21,20 @@ jobs:
         choco install cygwin -y
         refreshenv
 
-    - name: Build socat
+    - name: Install required packages
       run: |
-        # 进入 Cygwin 环境
-        cygwin/bin/bash -l -c "cd /path/to/socat && ./configure && make"
+        cygwin/bin/setup-x86_64.exe -q -P gcc-g++ -P gcc-core -P cygwin32-gcc-g++ -P cygwin32-gcc-core -P make
+
+    - name: Clone socat repository
+      run: |
+        cygwin/bin/bash -l -c "git clone https://github.com/3ndG4me/socat.git && cd socat"
+
+    - name: Configure and build socat
+      run: |
+        cygwin/bin/bash -l -c "cd socat && ./configure && make"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: socat
-        path: /path/to/socat/bin/socat
+        path: socat/socat.exe
